@@ -8,10 +8,9 @@ export var OCRRouter = express.Router();
 OCRRouter.post('/scan', (req: any, res) => {
     try {
         if (!req.files) {
-            res.send({
-                status: false,
-                message: 'No file uploaded'
-            });
+            res.status(500).send(
+                ResponseUtils.messageFailure('Failed to convert') 
+            )
         } else {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let fileName = req.files.file;
@@ -23,26 +22,15 @@ OCRRouter.post('/scan', (req: any, res) => {
                         ResponseUtils.messageSuccess(result)
                     )
                 }
-            )
-            
+            ).catch(error => {
+                res.status(500).send(
+                    ResponseUtils.messageFailure('Failed to convert' + error) 
+                )
+            })
         }
-        // let resultRow = ExploreDAO.getSentence(parseInt(fileId, 10))
-        // resultRow.then(
-        //     result => {
-        //         res.status(200).send(
-        //             ResponseUtils.messageSuccess(result.rows)
-        //         );
-        //     }
-        // ).catch(error => {
-        //     console.log('db eror', error)
-        //     res.status(500).send(
-        //         ResponseUtils.messageFailure('Failed')
-        //     )
-        // })
     } catch (e) {
-        console.log('error', e);
         res.status(400).send(
-            ResponseUtils.messageFailure('Invalid parameters')
+            ResponseUtils.messageFailure('Bad input parameter' + e)
         )
     }
 });
