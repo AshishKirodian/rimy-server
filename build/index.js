@@ -28,11 +28,17 @@ const cors_1 = __importDefault(require("cors"));
 const bodyParser = __importStar(require("body-parser"));
 const defaultRoutes_1 = require("./Routes/Default/Route/defaultRoutes");
 const sampleRoute_1 = require("./Routes/Sample/Route/sampleRoute");
+const ocrRoute_1 = require("./Routes/OCR/Route/ocrRoute");
 exports.app = express_1.default();
+const fileUpload = require('express-fileupload');
 const http = require("http");
+exports.app.use(fileUpload({
+    createParentPath: true
+}));
 exports.app.use(bodyParser.json());
 exports.app.use(cors_1.default()); // to enable cors for requests
 exports.app.use('/', sampleRoute_1.sampleRouter);
+exports.app.use('/ocr', ocrRoute_1.OCRRouter);
 exports.app.use('*', defaultRoutes_1.defaultRouter); // if the user tries to access a path that does not exist.
 const server = http.createServer(exports.app);
 var port = 5000;

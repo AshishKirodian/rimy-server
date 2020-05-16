@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
+    "@google-cloud/vision": "^1.11.0",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-fileupload": "^1.1.7-alpha.3"
   },
   "devDependencies": {
     "@types/body-parser": "^1.17.1",
@@ -15,7 +17,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "tsc-watch --onSuccess \"node --inspect ./build/index.js\""
+    "start": "tsc-watch --onSuccess \"node --inspect ./build/index.js\" && export GOOGLE_APPLICATION_CREDENTIALS=\"./key/credentials.json\""
   },
   "author": "",
   "license": "ISC"
