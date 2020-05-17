@@ -25,20 +25,26 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.app = void 0;
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
+var path = require('path');
 const bodyParser = __importStar(require("body-parser"));
 const defaultRoutes_1 = require("./Routes/Default/Route/defaultRoutes");
 const sampleRoute_1 = require("./Routes/Sample/Route/sampleRoute");
 const ocrRoute_1 = require("./Routes/OCR/Route/ocrRoute");
+const saveDAO_1 = require("./Routes/SaveHistory/Route/saveDAO");
+const historyRoute_1 = require("./Routes/History/Route/historyRoute");
 exports.app = express_1.default();
 const fileUpload = require('express-fileupload');
 const http = require("http");
 exports.app.use(fileUpload({
     createParentPath: true
 }));
+exports.app.use('/static', express_1.default.static('uploads')); // to serve image files
 exports.app.use(bodyParser.json());
 exports.app.use(cors_1.default()); // to enable cors for requests
 exports.app.use('/', sampleRoute_1.sampleRouter);
 exports.app.use('/ocr', ocrRoute_1.OCRRouter);
+exports.app.use('/history', saveDAO_1.saveRouter);
+exports.app.use('/gethistory', historyRoute_1.historyRouter);
 exports.app.use('*', defaultRoutes_1.defaultRouter); // if the user tries to access a path that does not exist.
 const server = http.createServer(exports.app);
 var port = 5000;

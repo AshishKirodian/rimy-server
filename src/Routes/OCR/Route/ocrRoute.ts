@@ -15,11 +15,12 @@ OCRRouter.post('/scan', (req: any, res) => {
             //Use the name of the input field (i.e. "avatar") to retrieve the uploaded file
             let fileName = req.files.file;
             fileName.mv('./uploads/' + fileName.name);
+            let imageURL = fileName.name;
             const client = new vision.ImageAnnotatorClient();
-            hello('./uploads/' + fileName.name, client).then(
+            scanImage('./uploads/' + fileName.name, client).then(
                 result => {
                     res.status(200).send(
-                        ResponseUtils.messageSuccess(result)
+                        ResponseUtils.messageSuccess({result, imageURL})
                     )
                 }
             ).catch(error => {
@@ -35,7 +36,7 @@ OCRRouter.post('/scan', (req: any, res) => {
     }
 });
 
-async function hello(file: string, client: any) {
+async function scanImage(file: string, client: any) {
     const [result] = await client.documentTextDetection(file);
     console.log(result);
     const fullTextAnnotation = result.textAnnotations;
